@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AlbumRepository;
 
 /**
  * @ORM\Entity(repositoryClass=AlbumRepository::class)
@@ -16,59 +17,63 @@ class Album
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"album:read", "artist:read", "track:read", "album_genre:read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Artist::class, inversedBy="albums")
+     * @Groups({"album:read"})
      */
     private $artist;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
+     * @Groups({"album:read", "artist:read"})
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $description;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text")
+     * 
      */
     private $cover;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text")
+     * @Groups({"album:read"})
      */
     private $cover_small;
 
-   
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
+     * @Groups({"album:read"})
      */
     private $popularity;
 
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="albums")
+     * 
      */
     private $genre;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="integer")
+     * @Groups({"album:read"})
      */
     private $release_date;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Track::class, inversedBy="album")
+     * @ORM\Column(type="text")
+     * @Groups({"album:read"})
      */
-    private $track;
+    private $description;
 
 
     public function __construct()
     {
         $this->genre = new ArrayCollection();
+        $this->tracks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,18 +105,7 @@ class Album
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
+   
     public function getCover(): ?string
     {
         return $this->cover;
@@ -149,7 +143,6 @@ class Album
         return $this;
     }
 
-
     /**
      * @return Collection|Genre[]
      */
@@ -174,29 +167,27 @@ class Album
         return $this;
     }
 
-    public function getReleaseDate(): ?\DateTimeInterface
+    public function getReleaseDate(): ?int
     {
         return $this->release_date;
     }
 
-    public function setReleaseDate(\DateTimeInterface $release_date): self
+    public function setReleaseDate(?int $release_date): self
     {
         $this->release_date = $release_date;
 
         return $this;
     }
 
-    public function getTrack(): ?Track
+    public function getDescription(): ?string
     {
-        return $this->track;
+        return $this->description;
     }
 
-    public function setTrack(?Track $track): self
+    public function setDescription(string $description): self
     {
-        $this->track = $track;
+        $this->description = $description;
 
         return $this;
     }
-
-   
 }

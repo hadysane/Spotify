@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\TrackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Entity\Album;
 /**
  * @ORM\Entity(repositoryClass=TrackRepository::class)
  */
@@ -20,29 +21,34 @@ class Track
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Album::class, mappedBy="track")
-     */
-    private $album;
-
-    /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"track:read","album:read"})
      */
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"track:read","album:read"})
      */
-    private $track_num;
+    private $mp3;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="integer")
+     * @Groups({"track:read","album:read"})
      */
     private $duration;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Album::class, inversedBy="tracks")
+     * @Groups({"track:read","album:read"})
      */
-    private $mp3;
+    private $album;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"track:read","album:read"})
+     */
+    private $track_no;
 
     public function __construct()
     {
@@ -54,35 +60,7 @@ class Track
         return $this->id;
     }
 
-    /**
-     * @return Collection|Album[]
-     */
-    public function getAlbum(): Collection
-    {
-        return $this->album;
-    }
-
-    public function addAlbum(Album $album): self
-    {
-        if (!$this->album->contains($album)) {
-            $this->album[] = $album;
-            $album->setTrack($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAlbum(Album $album): self
-    {
-        if ($this->album->removeElement($album)) {
-            // set the owning side to null (unless already changed)
-            if ($album->getTrack() === $this) {
-                $album->setTrack(null);
-            }
-        }
-
-        return $this;
-    }
+    
 
     public function getName(): ?string
     {
@@ -92,30 +70,6 @@ class Track
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getTrackNum(): ?int
-    {
-        return $this->track_num;
-    }
-
-    public function setTrackNum(int $track_num): self
-    {
-        $this->track_num = $track_num;
-
-        return $this;
-    }
-
-    public function getDuration(): ?\DateTimeInterface
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(\DateTimeInterface $duration): self
-    {
-        $this->duration = $duration;
 
         return $this;
     }
@@ -131,4 +85,42 @@ class Track
 
         return $this;
     }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getAlbum(): ?Album
+    {
+        return $this->album;
+    }
+
+    public function setAlbum(?Album $album): self
+    {
+        $this->album = $album;
+
+        return $this;
+    }
+
+    public function getTrackNo(): ?int
+    {
+        return $this->track_no;
+    }
+
+    public function setTrackNo(int $track_no): self
+    {
+        $this->track_no = $track_no;
+
+        return $this;
+    }
+
+   
 }

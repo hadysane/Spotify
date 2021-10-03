@@ -3,19 +3,43 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use App\Entity\Album;
+use App\Entity\Track;
 
 class AlbumController extends AbstractController
 {
     /**
-     * @Route("/album", name="album")
+     * @Route("/api/albums", name="api_albums", methods={"GET"})
      */
-    public function index(): Response
+    public function all(SerializerInterface $serializer)
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/AlbumController.php',
+        $repository = $this->getDoctrine()->getRepository(Album::class);
+
+        $albums = $repository->findAll();
+
+        $json = $serializer->serialize($albums, 'json', [
+            'groups' => 'album:read'
         ]);
+
+        return new JsonResponse($json, 200, [], true); 
+    }
+
+    /**
+     * @Route("/api/albums/{id}", name="api_album", methods={"GET"})
+     */
+    public function  show(int $id, SerializerInterface $serializer)
+    {
+        $repository = $this->getDoctrine()->getRepository(Album::class);
+
+        $albums = $repository->find($id);
+
+        $json = $serializer->serialize($albums, 'json', [
+            'groups' => 'album:read'
+        ]);
+
+        return new JsonResponse($json, 200, [], true);
     }
 }

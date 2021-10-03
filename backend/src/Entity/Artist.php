@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * @ORM\Entity(repositoryClass=ArtistRepository::class)
@@ -15,33 +18,39 @@ class Artist
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"artist:read", "album:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"artist:read", "album:read"})
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $description;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
+     * @Groups({"artist:read"})
      */
     private $bio;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"artist:read"})
      */
     private $photo;
 
     /**
      * @ORM\OneToMany(targetEntity=Album::class, mappedBy="artist")
+     * @Groups({"artist:read"})
      */
     private $albums;
+
+    /**
+     * @ORM\Column(type="text")
+     * @Groups({"artist:read"})
+     */
+    private $description;
 
 
     public function __construct()
@@ -62,18 +71,6 @@ class Artist
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -128,6 +125,18 @@ class Artist
                 $album->setArtist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
