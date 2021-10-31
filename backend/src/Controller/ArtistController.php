@@ -4,21 +4,20 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Artist;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-
+use App\Entity\Track;
+use App\Entity\Artist;
 
 class ArtistController extends AbstractController
 {
     /**
      * @Route("/api/artists", name="api_all_artist", methods={"GET"})
-     * 
      */
     public function allShow(SerializerInterface $serializer)
     {
         $repository = $this->getDoctrine()->getRepository(Artist::class);
-
+        
         $artists = $repository->findAll();
 
         $json = $serializer->serialize($artists, 'json', [
@@ -31,7 +30,6 @@ class ArtistController extends AbstractController
 
     /** 
      * @Route("/api/artists/{id}", name="api_artist", methods={"GET"})
-     * 
      */
     public function show(int $id, SerializerInterface $serializer)
     {

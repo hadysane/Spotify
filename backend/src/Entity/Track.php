@@ -22,33 +22,37 @@ class Track
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"track:read","album:read"})
+     * @Groups({"track:read","album-track:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"track:read","album:read"})
+     * @Groups({"track:read","album-track:read"})
      */
     private $mp3;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"track:read","album:read"})
+     * @Groups({"track:read","album-track:read"})
      */
     private $duration;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Album::class, inversedBy="tracks")
-     * @Groups({"track:read","album:read"})
-     */
-    private $album;
+   
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"track:read","album:read"})
+     * @Groups({"track:read","album-track:read"})
      */
     private $track_no;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Album::class, inversedBy="tracks")
+     * 
+     */
+    private $album;
+
+  
 
     public function __construct()
     {
@@ -98,7 +102,20 @@ class Track
         return $this;
     }
 
-    public function getAlbum(): ?Album
+    
+    public function getTrack_no(): ?int
+    {
+        return $this->track_no;
+    }
+
+    public function setTrack_no(int $track_no): self
+    {
+        $this->track_no = $track_no;
+
+        return $this;
+    }
+
+    public function getAlbum()
     {
         return $this->album;
     }
@@ -108,19 +125,5 @@ class Track
         $this->album = $album;
 
         return $this;
-    }
-
-    public function getTrackNo(): ?int
-    {
-        return $this->track_no;
-    }
-
-    public function setTrackNo(int $track_no): self
-    {
-        $this->track_no = $track_no;
-
-        return $this;
-    }
-
-   
+    }   
 }
