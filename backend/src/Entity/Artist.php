@@ -18,13 +18,13 @@ class Artist
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"artist:read", "album:read"})
+     * @Groups({"artist:read", "album:read", "album-artist:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"artist:read", "album:read"})
+     * @Groups({"artist:read"})
      */
     private $name;
 

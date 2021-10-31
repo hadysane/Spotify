@@ -47,4 +47,16 @@ class TrackRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findTitle($name)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->andWhere('a.name LIKE :name')
+            ->orderBy('a.name', 'ASC')
+            ->setParameter('name', $name . '%')
+            ->getQuery();
+
+
+        return $qb->execute();
+    }
 }
