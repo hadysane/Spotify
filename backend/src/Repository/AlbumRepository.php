@@ -55,10 +55,24 @@ class AlbumRepository extends ServiceEntityRepository
         ->addSelect('COUNT(track.album) AS  count_track ')
         ->innerJoin('App\Entity\Track', 'track', 'WITH' ,'track.album = a.id')
         ->groupBy('a.id')
+        ->getQuery(); 
         ;
+        // dump($qd);
+        return $qd->execute(); 
+        
+    }
 
-        $query = $qd->getQuery(); 
-        return $query->execute(); 
+    public function findTitle($name)
+    {
+        $qb = $this->createQueryBuilder('a')
+        ->andWhere('a.name LIKE :name')
+        ->orderBy('a.name', 'ASC')
+        ->setParameter('name', $name.'%')
+        ->getQuery(); 
+        ;
+            
+
+        return $qb->execute(); 
         
     }
 }

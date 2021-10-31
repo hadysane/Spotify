@@ -21,7 +21,7 @@ class AlbumController extends AbstractController
         $albums = $repository->allAlbum();
 
         $json = $serializer->serialize($albums, 'json', [
-            'groups' => 'album:read'
+            'groups' => ['album:read']
         ]);
 
         return new JsonResponse($json, 200, [], true); 
