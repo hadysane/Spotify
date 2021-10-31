@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Album;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Track; 
 
 /**
  * @method Album|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +48,17 @@ class AlbumRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function allAlbum()
+    {
+        $qd = $this->createQueryBuilder('a')
+        ->addSelect('COUNT(track.album) AS  count_track ')
+        ->innerJoin('App\Entity\Track', 'track', 'WITH' ,'track.album = a.id')
+        ->groupBy('a.id')
+        ;
+
+        $query = $qd->getQuery(); 
+        return $query->execute(); 
+        
+    }
 }

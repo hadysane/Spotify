@@ -40,12 +40,6 @@ class Album
     private $cover;
 
     /**
-     * @ORM\Column(type="text")
-     * @Groups({"album:read", "album-artist:read"})
-     */
-    private $cover_small;
-
-    /**
      * @ORM\Column(type="integer")
      * @Groups({"album:read", "album-artist:read"})
      */
@@ -57,12 +51,7 @@ class Album
      */
     private $genre;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @Groups({"album:read", "album-artist:read"})
-     */
-    private $release_date;
-
+   
     /**
      * @ORM\Column(type="text")
      * @Groups({"album:read"})
@@ -74,6 +63,18 @@ class Album
      * @Groups({"album-track:read"})
      */
     private $tracks;
+
+    /**
+     * @ORM\Column(type="text")
+     * @Groups({"album:read", "album-artist:read"})
+     */
+    private $cover_small;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"album:read", "album-artist:read"})
+     */
+    private $release_date;
 
 
     
@@ -125,18 +126,6 @@ class Album
         return $this;
     }
 
-    public function getCoverSmall(): ?string
-    {
-        return $this->cover_small;
-    }
-
-    public function setCoverSmall(?string $cover_small): self
-    {
-        $this->cover_small = $cover_small;
-
-        return $this;
-    }
-
    
     public function getPopularity(): ?int
     {
@@ -170,18 +159,6 @@ class Album
     public function removeGenre(Genre $genre): self
     {
         $this->genre->removeElement($genre);
-
-        return $this;
-    }
-
-    public function getReleaseDate(): ?int
-    {
-        return $this->release_date;
-    }
-
-    public function setReleaseDate(?int $release_date): self
-    {
-        $this->release_date = $release_date;
 
         return $this;
     }
@@ -224,6 +201,30 @@ class Album
                 $track->setAlbum(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCover_small(): ?string
+    {
+        return $this->cover_small;
+    }
+
+    public function setCover_small(string $cover_small): self
+    {
+        $this->cover_small = $cover_small;
+
+        return $this;
+    }
+
+    public function getRelease_date(): ?int
+    {
+        return $this->release_date;
+    }
+
+    public function setRelease_date(int $release_date): self
+    {
+        $this->release_date = $release_date;
 
         return $this;
     }

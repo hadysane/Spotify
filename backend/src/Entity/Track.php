@@ -103,19 +103,19 @@ class Track
     }
 
     
-    public function getTrackNo(): ?int
+    public function getTrack_no(): ?int
     {
         return $this->track_no;
     }
 
-    public function setTrackNo(int $track_no): self
+    public function setTrack_no(int $track_no): self
     {
         $this->track_no = $track_no;
 
         return $this;
     }
 
-    public function getAlbum(): ?Album
+    public function getAlbum()
     {
         return $this->album;
     }
@@ -125,9 +125,5 @@ class Track
         $this->album = $album;
 
         return $this;
-    }
-
-    
-
-   
+    }   
 }
